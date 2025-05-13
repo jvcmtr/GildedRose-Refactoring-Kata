@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
+using GildedRoseKata.Utils;
 
 namespace GildedRoseKata;
 
@@ -46,16 +48,26 @@ public class Program
             days = int.Parse(args[0]) + 1;
         }
 
+        var str = new StringBuilder();
         for (var i = 0; i < days; i++)
         {
-            Console.WriteLine("-------- day " + i + " --------");
-            Console.WriteLine("name, sellIn, quality");
+            var table = new Table<string>();
             for (var j = 0; j < items.Count; j++)
             {
-                Console.WriteLine(items[j].Name + ", " + items[j].SellIn + ", " + items[j].Quality);
+                table[j.ToString(), "__Name__"] = items[j].Name; 
+                table[j.ToString(), "__Sell_in__"] = items[j].SellIn.ToString(); 
+                table[j.ToString(), "__Quality__"] = items[j].Quality.ToString();
             }
+            
+            str.AppendLine("                       ░▒█ DAY " + i + " █▒░  \n");
+            str.Append(table.GetFormated(" |  ", ' ', Alignment.ALIGN_LEFT));
+            var dayInfo = ConsoleViewUtils.Boxed(str.ToString());
+            Console.WriteLine( dayInfo );
+
             Console.WriteLine("");
             app.UpdateQuality();
+            str.Clear();
         }
     }
+
 }
