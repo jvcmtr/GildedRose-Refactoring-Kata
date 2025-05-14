@@ -86,28 +86,20 @@ public class GildedRose
 
 
 
-    // Aplicando os limites de qualidade em uma unica função
-    private void AddToQuality(int index, int ammount = -1){
-        var q = GetItem(index).Quality + ammount; 
-        
-        GetItem(index).Quality = Math.Clamp(q, 0, 50);
+    protected virtual void AddToQuality(int index, int ammount = -1){
+        GetItem(index).Quality += ammount;
     }
 
-    // Por mais que seja somente uma linha, isolar este comportamento (reduzir o sellIn) em um só lugar 
-    // facilita futuras possiveis extenções deste código. Por exemplo: Caso queiramos que a propriedade SellIn não contabilize feriados. 
-    private void AddToSellIn(int index, int ammount = -1){
+    protected virtual void AddToSellIn(int index, int ammount = -1){
         GetItem(index).SellIn += ammount;
     }
 
-    // Isola o acesso a propriedade, mas ainda mantém os limites (<50 e >0) em uma unica função;
-    private void SetQuality(int index, int value){
+    protected virtual void SetQuality(int index, int value){
         var diference =  value - GetItem(index).Quality ; 
         AddToQuality(index, diference);
     }
 
-    // Isolar o acesso a esta variavel permitiria mudar a implementação da lista e manter o encapsulamento.
-    // Exemplo: Em uma refatoração futura poderiamos colocar a lista em uma outra classe ou até mesmo em um bd
-    private Item GetItem(int index){
+    protected virtual Item GetItem(int index){
         return Items[index];
     }
 
