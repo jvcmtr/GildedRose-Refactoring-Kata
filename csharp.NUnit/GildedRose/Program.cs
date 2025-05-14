@@ -11,7 +11,77 @@ public class Program
     {
         Console.WriteLine("OMGHAI!");
 
-        IList<Item> items = new List<Item>
+
+        IList<Item> items = GetItems();
+        int days = 2;
+        string mode = "default";
+        
+        if (args.Length > 0)
+        {
+            days = int.Parse(args[0]) + 1;
+        }
+
+        if (args.Length > 1)
+        {
+            mode = args[1];
+        }
+
+        switch(mode){
+            case "default":
+                RunDefault(days, items);
+                break;
+            case "style":
+                RunStylish(days, items);
+                break;
+            default:
+                Console.WriteLine("### ERROR, '" + mode + "' is not a valid mode." );
+                break;
+        }        
+    }
+
+    public static void RunDefault(int days, IList<Item> items ){
+        var app = new GildedRose(items);
+
+        for (var i = 0; i < days; i++)
+        {
+            Console.WriteLine("-------- day " + i + " --------");
+            Console.WriteLine("name, sellIn, quality");
+            for (var j = 0; j < items.Count; j++)
+            {
+                Console.WriteLine(items[j].Name + ", " + items[j].SellIn + ", " + items[j].Quality);
+            }
+            Console.WriteLine("");
+            app.UpdateQuality();
+        }
+    }
+
+    public static void RunStylish(int days, IList<Item> items ){
+        var app = new GildedRose(items);
+
+        var str = new StringBuilder();
+        for (var i = 0; i < days; i++)
+        {
+            var table = new Table<string>();
+            for (var j = 0; j < items.Count; j++)
+            {
+                table[j.ToString(), "__Name__"] = items[j].Name; 
+                table[j.ToString(), "__Sell_in__"] = items[j].SellIn.ToString(); 
+                table[j.ToString(), "__Quality__"] = items[j].Quality.ToString();
+            }
+            
+            str.AppendLine("                       ░▒█ DAY " + i + " █▒░  \n");
+            str.Append(table.GetFormated(" |  ", ' ', Alignment.ALIGN_LEFT));
+            var dayInfo = ConsoleViewUtils.Boxed(str.ToString());
+            Console.WriteLine( dayInfo );
+
+            Console.WriteLine("");
+            app.UpdateQuality();
+            str.Clear();
+        }
+    }
+
+    public static List<Item> GetItems(){
+        return new List<Item>
         {
             new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20},
             new Item {Name = "Aged Brie", SellIn = 2, Quality = 0},
@@ -39,35 +109,6 @@ public class Program
             // this conjured item does not work properly yet
             new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
         };
-
-        var app = new GildedRose(items);
-
-        int days = 2;
-        if (args.Length > 0)
-        {
-            days = int.Parse(args[0]) + 1;
-        }
-
-        var str = new StringBuilder();
-        for (var i = 0; i < days; i++)
-        {
-            var table = new Table<string>();
-            for (var j = 0; j < items.Count; j++)
-            {
-                table[j.ToString(), "__Name__"] = items[j].Name; 
-                table[j.ToString(), "__Sell_in__"] = items[j].SellIn.ToString(); 
-                table[j.ToString(), "__Quality__"] = items[j].Quality.ToString();
-            }
-            
-            str.AppendLine("                       ░▒█ DAY " + i + " █▒░  \n");
-            str.Append(table.GetFormated(" |  ", ' ', Alignment.ALIGN_LEFT));
-            var dayInfo = ConsoleViewUtils.Boxed(str.ToString());
-            Console.WriteLine( dayInfo );
-
-            Console.WriteLine("");
-            app.UpdateQuality();
-            str.Clear();
-        }
     }
 
 }
