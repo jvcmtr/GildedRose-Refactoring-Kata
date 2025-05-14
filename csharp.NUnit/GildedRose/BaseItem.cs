@@ -1,7 +1,6 @@
-﻿
-namespace GildedRoseKata;
+﻿namespace GildedRoseKata;
 
-public class Item
+public abstract class BaseItem
 {
     public static readonly int MAX_QUALITY = 50; 
     public static readonly int MIN_QUALITY = 0;
@@ -18,4 +17,5 @@ public class Item
             : value;
     }
 }
+
 
