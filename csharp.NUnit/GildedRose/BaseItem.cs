@@ -5,11 +5,11 @@ public abstract class BaseItem
     public static readonly int MAX_QUALITY = 50; 
     public static readonly int MIN_QUALITY = 0;
      
-    public string Name { get; set; }
-    public int SellIn { get; set; }
+    public virtual string Name { get; set; }
+    public virtual int SellIn { get; set; }
     
     private int _quality; 
-    public int Quality { 
+    public virtual int Quality { 
         get => _quality; 
         set => _quality = 
             value > MAX_QUALITY? MAX_QUALITY
